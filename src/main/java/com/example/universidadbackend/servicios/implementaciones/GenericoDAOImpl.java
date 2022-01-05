@@ -7,6 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * Clase generica de los metodos comunes, para evitar repetir mucho codigo
+ * @param <E> Entidad ex: Carrera
+ * @param <R> Repositorios ex: CarreraRepository
+ */
 public class GenericoDAOImpl <E, R extends CrudRepository<E, Integer>> implements GenericoDAO<E> {
 
     protected final R repository;

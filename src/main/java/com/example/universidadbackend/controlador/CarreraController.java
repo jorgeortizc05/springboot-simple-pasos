@@ -3,9 +3,12 @@ package com.example.universidadbackend.controlador;
 import com.example.universidadbackend.exception.BadRequestException;
 import com.example.universidadbackend.model.entidades.Carrera;
 import com.example.universidadbackend.servicios.contratos.CarreraDAO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,7 +40,7 @@ public class CarreraController extends GenericController<Carrera,CarreraDAO>{
         return service.save(carrera);
     }
 
-    @PutMapping("/{id}")//PathVariable no es necesario poner value, porque se llama id
+    /*@PutMapping("/{id}")//PathVariable no es necesario poner value, porque se llama id
     public Carrera actualizarCarrera(@PathVariable Integer id, @RequestBody Carrera carrera) {
         Carrera carreraUpdate = null;
         Optional<Carrera> oCarrera = service.findById(id);
@@ -48,6 +51,27 @@ public class CarreraController extends GenericController<Carrera,CarreraDAO>{
         carreraUpdate.setCantidadAnios(carrera.getCantidadAnios());
         carreraUpdate.setCantidaMaterias(carrera.getCantidaMaterias());
         return service.save(carreraUpdate);
+    }*/
+
+    @PutMapping("/{id}")//PathVariable no es necesario poner value, porque se llama id
+    public ResponseEntity<?> actualizarCarrera(@PathVariable Integer id, @RequestBody Carrera carrera) {
+        Map<String, Object> mensaje = new HashMap<>();
+        Carrera carreraUpdate = null;
+        Optional<Carrera> oCarrera = service.findById(id);
+        if (!oCarrera.isPresent()) {
+            //throw new BadRequestException(String.format("la carrera con id %d no existe", id));
+            mensaje.put("success", Boolean.FALSE);
+            mensaje.put("mensaje", String.format("%s con ID %d no existe", nombreEntidad, id));
+            return ResponseEntity.badRequest().body(mensaje);
+        }
+        carreraUpdate = oCarrera.get();
+        carreraUpdate.setCantidadAnios(carrera.getCantidadAnios());
+        carreraUpdate.setCantidaMaterias(carrera.getCantidaMaterias());
+
+        mensaje.put("datos", service.save(carreraUpdate));
+        mensaje.put("sucess", Boolean.TRUE);
+
+        return ResponseEntity.ok(mensaje);
     }
 
     /*@DeleteMapping("/{id}")
