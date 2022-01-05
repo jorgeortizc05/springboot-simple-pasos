@@ -1,13 +1,37 @@
 package com.example.universidadbackend.model.entidades;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Para apirest, recordemos que no podemos instanciar una clase abstracta, por lo cual
+ * se utiliza JsonTypeInfo, que es necesario incluir en el json de post y el
+ * JsonSubTypes, para tener instancias de alumno y profesor.
+ * Ex.
+ * {
+ *     "tipo" : "alumno", //este es de JsonTypeInfo
+ *     "nombre" : "Alvaro",
+ *     "apellido" : "Martin",
+ *     "dni" : "20164895"
+ * }
+ */
 @Entity
 @Table(name = "personas")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) //Esto es herencia, JOINED: crea tabla persona, y crea otra tabla ex: alumno, esta se relaciona con el padre
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "tipo" //necesario incluirlo en el json ex: "tipo": "alumno"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Alumno.class, name = "alumno"),//va a instanciar de clase alumno
+        @JsonSubTypes.Type(value = Profesor.class, name = "profesor") //va a instanciar de clase profesor
+})
 public abstract class Persona implements Serializable {
 
     @Id

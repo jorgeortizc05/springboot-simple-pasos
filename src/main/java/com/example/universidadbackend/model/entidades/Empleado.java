@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "empleados")
-@PrimaryKeyJoinColumn(name = "persona_id")
+@PrimaryKeyJoinColumn(name = "persona_id")//me relaciono con mi clase padre Persona
 public class Empleado extends Persona {
 
     private BigDecimal sueldo;

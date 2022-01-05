@@ -1,10 +1,12 @@
 package com.example.universidadbackend.model.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "alumnos")
-@PrimaryKeyJoinColumn(name = "persona_id")
+@PrimaryKeyJoinColumn(name = "persona_id") //me relaciono con mi clase padre Persona
 public class Alumno extends Persona {
 
     @ManyToOne(
@@ -16,7 +18,8 @@ public class Alumno extends Persona {
             }
     )
     @JoinColumn(name = "carrera_id")
-    private Carrera carrera;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "alumnos"}) //el atributo debe ser el que contenga en la clase Carrera que referencia a la clase Alumno, en este caso alumnos
+    private Carrera carrera;//@JsonIgnorePorperties mas info en Class Carrera. Evitamos un bucle infinito, debido a que json sobrescribe el fetch lazy a eager
 
     public Alumno() {
     }

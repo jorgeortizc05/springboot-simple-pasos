@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "profesores")
-@PrimaryKeyJoinColumn(name = "persona_id")
+@PrimaryKeyJoinColumn(name = "persona_id")//me relaciono con mi clase padre Persona
 public class Profesor extends Persona {
 
     private BigDecimal sueldo;
